@@ -264,4 +264,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    /* ==========================================
+       5. ACTUALIZACIÓN DINÁMICA DE CIFRAS
+       ========================================== */
+    const cargarEstadisticasImpacto = async () => {
+        const seccionCifras = document.querySelector('.seccion-cifras');
+        if (!seccionCifras) return; // Solo ejecutar si existe la sección (index.html)
+
+        try {
+            const response = await fetch('http://localhost:8080/api/donaciones/estadisticas');
+            if (response.ok) {
+                const stats = await response.json();
+                const contadores = seccionCifras.querySelectorAll('.numero');
+                
+                // En index.html: Index 0 = Familias, Index 1 = Dinero, Index 2 = Donadores
+                if (contadores.length >= 3) {
+                    // Formatear monto: si es 1500.50 -> 1,500
+                    const montoFormateado = Math.floor(stats.totalMonto).toLocaleString('es-PE');
+                    
+                    // Actualizamos solo los valores que vienen de la base de datos
+                    contadores[1].textContent = montoFormateado;
+                    contadores[2].textContent = stats.totalDonadores;
+                }
+            }
+        } catch (error) {
+            console.error('Error al cargar estadísticas:', error);
+        }
+    };
+
+    cargarEstadisticasImpacto();
 });

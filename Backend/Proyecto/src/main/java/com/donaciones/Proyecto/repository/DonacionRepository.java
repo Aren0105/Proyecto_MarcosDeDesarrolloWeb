@@ -1,10 +1,12 @@
 package com.donaciones.Proyecto.repository;
 
-import com.donaciones.Proyecto.model.Donacion;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.donaciones.Proyecto.model.Donacion;
 
 @Repository
 public interface DonacionRepository extends JpaRepository<Donacion, Long> {
@@ -18,4 +20,9 @@ public interface DonacionRepository extends JpaRepository<Donacion, Long> {
     // Buscar donaciones por tipo
     List<Donacion> findByTipo(String tipo);
 
+    @Query("SELECT COALESCE(SUM(d.monto), 0) FROM Donacion d")
+    Double sumarMontoTotal();
+
+    @Query("SELECT COUNT(d.id) FROM Donacion d")
+    long contarDonacionesTotales();
 }

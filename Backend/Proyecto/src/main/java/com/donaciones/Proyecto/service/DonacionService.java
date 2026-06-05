@@ -1,16 +1,18 @@
 package com.donaciones.Proyecto.service;
 
 
-import com.donaciones.Proyecto.model.Donacion;
-import com.donaciones.Proyecto.repository.CampaniaRepository;
-import com.donaciones.Proyecto.repository.DonacionRepository;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import com.donaciones.Proyecto.model.Donacion;
+import com.donaciones.Proyecto.repository.CampaniaRepository;
+import com.donaciones.Proyecto.repository.DonacionRepository;
 
 @Service
 public class DonacionService {
@@ -55,5 +57,14 @@ public class DonacionService {
             Donacion actualizada = donacionRepository.save(donacion);
             return ResponseEntity.ok(actualizada);
         }).orElse(ResponseEntity.notFound().build());
+    }
+
+    public Map<String, Object> obtenerEstadisticas() {
+        Double total = donacionRepository.sumarMontoTotal();
+        long donadores = donacionRepository.contarDonacionesTotales();
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalMonto", total != null ? total : 0.0);
+        stats.put("totalDonadores", donadores);
+        return stats;
     }
 }

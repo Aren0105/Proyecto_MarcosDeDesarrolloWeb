@@ -25,4 +25,9 @@ public class DonacionController {
     public List<Donacion> porDonador(@PathVariable Long donadorId) {
         return donacionService.porDonador(donadorId);
     }
+
+    @GetMapping("/estadisticas")
+    public Map<String, Object> obtenerEstadisticas() {
+        return donacionService.obtenerEstadisticas();
+    }
 }
