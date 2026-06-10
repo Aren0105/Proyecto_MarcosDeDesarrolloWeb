@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import com.donaciones.Proyecto.DTO.SoliContrasenia;
-import com.donaciones.Proyecto.DTO.ResetContrasenia;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
