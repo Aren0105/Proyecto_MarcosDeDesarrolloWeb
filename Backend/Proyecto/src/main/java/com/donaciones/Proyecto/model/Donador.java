@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -23,5 +24,10 @@ public class Donador {
     private String email;
 
     @Column(length = 20)
-    private String telefono;
+    private String contrasenia;
+
+
+    @Column(length = 255)
+    private String resetToken;
+    private LocalDateTime tokenExpiryDate;
 }

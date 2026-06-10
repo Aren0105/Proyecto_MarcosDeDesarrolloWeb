@@ -4,6 +4,7 @@ import com.donaciones.Proyecto.model.Donador;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,4 +15,5 @@ public interface DonadorRepository extends JpaRepository<Donador, Long> {
 
     // Buscar por nombre (contiene)
     List<Donador> findByNombreContainingIgnoreCase(String nombre);
+    Optional<Donador> findByResetTokenAndTokenExpiryDateAfter(String token, LocalDateTime now);
 }

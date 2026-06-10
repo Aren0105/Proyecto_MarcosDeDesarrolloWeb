@@ -1,8 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    /* ==========================================
-       1. FORMULARIO DE CONTACTO (Acerca de)
-       ========================================== */
+    // ==========================================
+    // FUNCIÓN PARA ALERTAS BONITAS CON BOOTSTRAP
+    // ==========================================
+    function mostrarAlerta(mensaje, tipo, contenedorId) {
+        const alertaHtml = `
+            <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
+                ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        
+        const contenedor = document.getElementById(contenedorId);
+        if (contenedor) {
+            contenedor.innerHTML = alertaHtml;
+            
+            setTimeout(() => {
+                const alerta = contenedor.querySelector('.alert');
+                if (alerta) alerta.remove();
+            }, 4000);
+        }
+    }
+
     const formContacto = document.getElementById('formContacto');
     const btnEnviarOriginal = document.getElementById('btnEnviar');
 
@@ -42,31 +61,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnEnviarOriginal.disabled = true;
 
                 try {
-                    //(falta endpoint de mensajes)
-                    /* 
-                    const response = await fetch('http://localhost:8080/api/mensajes/contacto', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            nombre: nombre,
-                            apellido: apellido,
-                            email: correo,
-                            mensaje: textoMensaje
-                        })
-                    });
-
-                    if (response.ok) {
-                        alert("¡Mensaje enviado con éxito!");
-                        formContacto.reset();
-                    } else {
-                        alert("Error al enviar el mensaje");
-                    }
-                    */
-                    alert("Mensaje enviado con éxito (demo)");
+                    // (falta endpoint de mensajes - demo)
+                    mostrarAlerta("Mensaje enviado con éxito", "success", "mensajeContacto");
                     formContacto.reset();
                 } catch (error) {
                     console.error('Error:', error);
-                    alert("Error de conexión con el servidor");
+                    mostrarAlerta("Error de conexión con el servidor", "danger", "mensajeContacto");
                 } finally {
                     btnEnviarOriginal.innerHTML = textoOriginal;
                     btnEnviarOriginal.disabled = false;
@@ -75,9 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /* ==========================================
-       2. LÓGICA PARA DONACIONES (Página Donar)
-       ========================================== */
     const btnDonar = document.getElementById('btnDonarAhora');
 
     if (btnDonar) {
@@ -151,8 +148,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const donadorId = sessionStorage.getItem('donadorId');
 
                 if (!donadorId) {
-                    alert("Debes iniciar sesión para donar");
-                    window.location.href = 'login.html';
+                    mostrarAlerta("Debes iniciar sesión para donar", "warning", "mensajeDonacion");
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
                     return;
                 }
 
@@ -174,22 +173,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
 
                     if (response.ok) {
-                        alert(`¡Donación de S/. ${monto.toFixed(2)} registrada con éxito!`);
-                        location.reload();
+                        mostrarAlerta(`¡Donación de S/. ${monto.toFixed(2)} registrada con éxito!`, "success", "mensajeDonacion");
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
                     } else {
-                        alert("Error al registrar la donación");
+                        mostrarAlerta("Error al registrar la donación", "danger", "mensajeDonacion");
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert("Error de conexión con el servidor");
+                    mostrarAlerta("Error de conexión con el servidor", "danger", "mensajeDonacion");
+                } finally {
+                    btnDonar.innerHTML = 'Donar ahora';
+                    elementos.forEach(el => { if (el) el.disabled = false; });
                 }
             });
         }
     }
 
-    /* ==========================================
-       3. LÓGICA DE REGISTRO (PostgreSQL)
-       ========================================== */
+
     const formRegistro = document.getElementById('formRegistro');
     if (formRegistro) {
         formRegistro.addEventListener('submit', async (e) => {
@@ -205,27 +207,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({
                         nombre: nombre,
                         email: email,
-                        telefono: pass  //  Guarda la contraseña en teléfono (temporal)
+                        contrasenia: pass
                     })
                 });
 
                 if (response.ok) {
-                    alert("¡Cuenta creada con éxito! Ahora puedes iniciar sesión.");
-                    window.location.href = 'login.html';
+                    mostrarAlerta("¡Cuenta creada con éxito! Ahora puedes iniciar sesión.", "success", "mensajeRegistro");
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
                 } else {
                     const error = await response.json();
-                    alert(error.mensaje || "Error al crear la cuenta");
+                    mostrarAlerta(error.mensaje || "Error al crear la cuenta", "danger", "mensajeRegistro");
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert("Error de conexión con el servidor");
+                mostrarAlerta("Error de conexión con el servidor", "danger", "mensajeRegistro");
             }
         });
     }
 
-    /* ==========================================
-       4. LÓGICA DE LOGIN (PostgreSQL)
-       ========================================== */
     const formLogin = document.getElementById('formLogin');
     if (formLogin) {
         formLogin.addEventListener('submit', async (e) => {
@@ -242,22 +243,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (response.ok) {
                     const donadores = await response.json();
-                    //  Busca por email y contraseña (guardada en telefono)
-                    const donador = donadores.find(d => d.email === email && d.telefono === pass);
+                    const donador = donadores.find(d => d.email === email && d.contrasenia === pass);
                     
                     if (donador) {
                         sessionStorage.setItem('donadorId', donador.id);
                         sessionStorage.setItem('usuarioLogueado', donador.nombre);
-                        window.location.href = 'index.html';
+                        mostrarAlerta(`¡Bienvenido ${donador.nombre}!`, "success", "mensajeLogin");
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 1500);
                     } else {
-                        alert("Correo o contraseña incorrectos");
+                        mostrarAlerta("Correo o contraseña incorrectos", "danger", "mensajeLogin");
                     }
                 } else {
-                    alert("Error de conexión con el servidor");
+                    mostrarAlerta("Error de conexión con el servidor", "danger", "mensajeLogin");
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert("Error de conexión con el servidor");
+                mostrarAlerta("Error de conexión con el servidor", "danger", "mensajeLogin");
             } finally {
                 btnLogin.innerHTML = 'Ingresar';
                 btnLogin.disabled = false;
@@ -265,12 +268,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* ==========================================
-       5. ACTUALIZACIÓN DINÁMICA DE CIFRAS
-       ========================================== */
     const cargarEstadisticasImpacto = async () => {
         const seccionCifras = document.querySelector('.seccion-cifras');
-        if (!seccionCifras) return; // Solo ejecutar si existe la sección (index.html)
+        if (!seccionCifras) return; 
 
         try {
             const response = await fetch('http://localhost:8080/api/donaciones/estadisticas');
@@ -278,12 +278,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const stats = await response.json();
                 const contadores = seccionCifras.querySelectorAll('.numero');
                 
-                // En index.html: Index 0 = Familias, Index 1 = Dinero, Index 2 = Donadores
                 if (contadores.length >= 3) {
-                    // Formatear monto: si es 1500.50 -> 1,500
                     const montoFormateado = Math.floor(stats.totalMonto).toLocaleString('es-PE');
-                    
-                    // Actualizamos solo los valores que vienen de la base de datos
                     contadores[1].textContent = montoFormateado;
                     contadores[2].textContent = stats.totalDonadores;
                 }
@@ -294,4 +290,63 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     cargarEstadisticasImpacto();
+
+    const linkOlvidaste = document.getElementById('linkOlvidaste');
+    const modalForgot = document.getElementById('modalForgot');
+    const btnEnviarReset = document.getElementById('btnEnviarReset');
+    const btnCerrarModal = document.getElementById('btnCerrarModal');
+    const mensajeReset = document.getElementById('mensajeReset');
+
+    if (linkOlvidaste && modalForgot) {
+        linkOlvidaste.addEventListener('click', (e) => {
+            e.preventDefault();
+            modalForgot.style.display = 'flex';
+        });
+
+        if (btnCerrarModal) {
+            btnCerrarModal.addEventListener('click', () => {
+                modalForgot.style.display = 'none';
+                if (mensajeReset) mensajeReset.innerHTML = '';
+                if (document.getElementById('emailReset')) document.getElementById('emailReset').value = '';
+            });
+        }
+
+        if (btnEnviarReset) {
+            btnEnviarReset.addEventListener('click', async () => {
+                const email = document.getElementById('emailReset').value;
+                
+                if (!email) {
+                    mostrarAlerta("Ingresa tu correo electrónico", "warning", "mensajeReset");
+                    return;
+                }
+
+                btnEnviarReset.disabled = true;
+                btnEnviarReset.innerHTML = 'Enviando...';
+
+                try {
+                    const response = await fetch('http://localhost:8080/api/donadores/forgot-password', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: email })
+                    });
+
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        mostrarAlerta(data.mensaje, "success", "mensajeReset");
+                        document.getElementById('emailReset').value = '';
+                    } else {
+                        mostrarAlerta(data.error || "Error al enviar", "danger", "mensajeReset");
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    mostrarAlerta("Error de conexión con el servidor", "danger", "mensajeReset");
+                } finally {
+                    btnEnviarReset.disabled = false;
+                    btnEnviarReset.innerHTML = 'Enviar instrucciones';
+                }
+            });
+        }
+    }
+
 });
