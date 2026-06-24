@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Contraseña</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="card p-4 mx-auto"
+            style="max-width:500px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+
+            <h2 class="text-center mb-3">Nueva contraseña</h2>
+
+            <p class="text-muted text-center small">
+                Ingresa y confirma tu nueva clave de acceso.
+            </p>
+
+            <form onsubmit="event.preventDefault(); cambiarPassword();">
+                <input type="password" id="password" class="form-control mb-3 py-2" placeholder="Nueva contraseña"
+                    required>
+
+                <div id="mensajeReset" class="mb-3"></div>
+
+                <button type="submit" class="btn btn-dark w-100 py-2 fw-bold">
+                    Guardar contraseña
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Captura el token desde los parámetros URL (?token=...)
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
+
+        async function cambiarPassword() {
+            const password = document.getElementById("password").value;
+            const boton = document.querySelector("button[type='submit']");
+
+            boton.disabled = true;
+
+            try {
+                // CORREGIDO: Usamos la ruta relativa hacia tu API en Spring
+                const response = await fetch("/api/donadores/reset-password", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        token: token,
+                        nuevaContrasenia: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    mostrarAlerta(data.mensaje || "Contraseña actualizada.", "success");
+
+                    // CORREGIDO: Redirección limpia a /login en lugar de login.html tras 2 segundos
+                    setTimeout(() => {
+                        window.location.href = "/login";
+                    }, 2000);
+
+                } else {
+                    mostrarAlerta(data.error || "El enlace de recuperación venció o es inválido.", "danger");
+                    boton.disabled = false;
+                }
+            } catch (error) {
+                mostrarAlerta("Error de comunicación con el servidor.", "danger");
+                boton.disabled = false;
+            }
+        }
+
+        function mostrarAlerta(mensaje, tipo) {
+            const alertaHtml = `
+        <div class="alert alert-${tipo} alert-dismissible fade show small" role="alert">
+            ${mensaje}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+            const contenedor = document.getElementById("mensajeReset");
+            if (contenedor) {
+                contenedor.innerHTML = alertaHtml;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
