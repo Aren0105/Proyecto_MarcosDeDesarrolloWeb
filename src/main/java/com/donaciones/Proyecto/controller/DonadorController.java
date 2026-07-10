@@ -1,6 +1,7 @@
 package com.donaciones.Proyecto.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,5 +60,17 @@ public class DonadorController {
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetContrasenia request) {
         return donadorService.restablecerContrasenia(request.getToken(), request.getNuevaContrasenia());
+    }
+
+    @PostMapping("/cambiar-password")
+    public ResponseEntity<?> cambiarContrasenia(@RequestBody Map<String, String> payload) {
+        try {
+            Long donadorId = Long.parseLong(payload.get("donadorId"));
+            String passActual = payload.get("passActual");
+            String passNueva = payload.get("passNueva");
+            return donadorService.cambiarContrasenia(donadorId, passActual, passNueva);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Datos inválidos."));
+        }
     }
 }

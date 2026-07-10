@@ -7,8 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ViewController {
 
     @GetMapping("/")
-    public String index() {
-        return "index"; // Muestra templates/index.html
+    public String loginRedirect() {
+        return "login"; // Redirige a la página de login como la principal
+    }
+
+    @GetMapping("/home")
+    public String home() {
+        return "index"; // La página de inicio ahora está en /home
     }
 
     @GetMapping("/login")
@@ -39,5 +44,20 @@ public class ViewController {
     @GetMapping("/reset-password")
     public String resetContrasenia() {
         return "reset-contrasenia"; // Muestra templates/reset-contrasenia.html
+    }
+
+    @GetMapping("/perfil")
+    public String perfil() {
+        return "perfil"; // Muestra la nueva página de perfil
+    }
+
+    @GetMapping("/campanias")
+    public String campanias() {
+        return "campanias"; // Muestra la lista de campañas
+    }
+
+    @GetMapping("/crear-campania")
+    public String crearCampania() {
+        return "crear-campania"; // Muestra el formulario para crear una campaña
     }
 }

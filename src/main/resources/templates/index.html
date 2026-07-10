@@ -16,23 +16,27 @@
 
 </head>
 
-<body>
+<body class="overflow-x-hidden">
 
 
-  <nav class="navbar navbar-expand-lg sticky-top">
+  <nav class="navbar navbar-expand-lg sticky-top py-2 px-lg-5">
     <div class="container-fluid px-lg-4">
-      <a class="navbar-brand" th:href="@{/}">Qusqu kamayuq</a>
+      <a class="navbar-brand" th:href="@{/home}">Qusqu kamayuq</a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto align-items-center gap-1">
-          <li class="nav-item"><a class="nav-link" href="/acerca">Acerca de</a></li>
-          <li class="nav-item"><a class="nav-link" href="/donar">Donar</a></li>
-          <li class="nav-item">
-            <a class="nav-link btn-ingresar ms-2" href="/login">Ingresar</a>
+        <ul class="navbar-nav ms-auto align-items-center gap-2">
+          <li class="nav-item"><a class="nav-link fw-semibold py-1 px-3 rounded-pill text-dark" href="/acerca">Acerca
+              de</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold py-1 px-3 rounded-pill text-dark"
+              href="/campanias">Campañas</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold py-1 px-3 rounded-pill text-dark" href="/donar">Donar</a>
+          </li>
+          <li class="nav-item" id="nav-usuario">
+            <a class="nav-link btn-ingresar ms-2 rounded fw-bold py-1 px-3" href="/login">Ingresar</a>
           </li>
         </ul>
       </div>
@@ -41,42 +45,47 @@
 
 
 
-  <section class="hero">
+  <section
+    class="hero position-relative d-flex align-items-center justify-content-center text-center text-white py-5 px-3"
+    style="min-height: 550px;">
     <div>
-      <h1>MANO SOLIDARIA</h1>
-      <p>Pequeñas acciones, grandes cambios</p>
+      <h1 class="fw-bolder">MANO SOLIDARIA</h1>
+      <p class="fs-5 mt-3 fw-semibold">Pequeñas acciones, grandes cambios</p>
     </div>
   </section>
 
 
 
-  <section class="seccion-ayudamos">
+  <section class="seccion-ayudamos py-5 bg-white">
     <div class="container">
-      <h2 class="titulo-seccion">¿A QUIENES AYUDAMOS?</h2>
+      <h2 class="titulo-seccion text-center mb-5">¿A QUIENES AYUDAMOS?</h2>
 
       <div class="row g-4 align-items-start">
 
         <div class="col-12 col-md-4">
-          <div class="card-ayuda">
-            <img src="img/niñosselva.jpg" alt="Niños vulnerables" />
-            <h6>Niños en situacion vulnerable</h6>
-            <p>Apoyamos a niños que viven en condiciones dificiles, brindadoles oportunidades para una vida mejor.</p>
+          <div class="card-ayuda border-0 text-center">
+            <img src="img/niñosselva.jpg" alt="Niños vulnerables" class="w-100 rounded" />
+            <h6 class="fs-6 fw-bold my-3">Niños en situacion vulnerable</h6>
+            <p class="small text-secondary lh-base">Apoyamos a niños que viven en condiciones dificiles, brindadoles
+              oportunidades para una vida mejor.</p>
           </div>
         </div>
 
         <div class="col-12 col-md-4">
-          <div class="card-ayuda">
-            <img src="img/pelucheniño.jpg" alt="Alimentación y bienestar" />
-            <h6>Alimentacion y bienestar</h6>
-            <p>Constribuimos a mejorar su salud mediantes alimentos y apoyo basico para su desarrollo.</p>
+          <div class="card-ayuda border-0 text-center">
+            <img src="img/pelucheniño.jpg" alt="Alimentación y bienestar" class="w-100 rounded" />
+            <h6 class="fs-6 fw-bold my-3">Alimentacion y bienestar</h6>
+            <p class="small text-secondary lh-base">Constribuimos a mejorar su salud mediantes alimentos y apoyo basico
+              para su desarrollo.</p>
           </div>
         </div>
 
         <div class="col-12 col-md-4">
-          <div class="card-ayuda">
-            <img src="img/estudiando.jpg" alt="Apoyo económico" />
-            <h6>Apoyo economico</h6>
-            <p>Brindamos ayuda economica para cubrir necesidades basicas y mejorar su calidad de vida.</p>
+          <div class="card-ayuda border-0 text-center">
+            <img src="img/estudiando.jpg" alt="Apoyo económico" class="w-100 rounded" />
+            <h6 class="fs-6 fw-bold my-3">Apoyo economico</h6>
+            <p class="small text-secondary lh-base">Brindamos ayuda economica para cubrir necesidades basicas y mejorar
+              su calidad de vida.</p>
           </div>
           <div class="icono-manos">
             <i class="bi bi-hand-heart-fill"></i>
@@ -89,35 +98,40 @@
 
 
 
-  <section class="banner-naranja">
+  <section class="banner-naranja text-white text-center py-5 px-3"
+    style="padding-top: 180px !important; padding-bottom: 180px !important;">
     <h2>POR LA NIÑEZ PERUANA,</h2>
     <h2>CONSTRUYENDO UN MEJOR MAÑANA</h2>
   </section>
 
 
 
-  <section class="seccion-historias">
+  <section class="seccion-historias py-5 bg-white">
     <div class="container">
-      <h2 class="titulo-seccion" style="text-align:left; margin-bottom:30px;">Historias breves</h2>
+      <h2 class="titulo-seccion mb-5">Historias breves</h2>
 
       <div class="row g-5">
         <div class="col-12 col-md-6">
 
-          <div class="historia-item mb-4">
-            <div class="historia-icono"><i class="bi bi-circle"></i></div>
+          <div class="historia-item d-flex gap-3 mb-4 align-items-start">
+            <div class="historia-icono d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 32px; height: 32px;"><i class="bi bi-circle"></i></div>
             <div>
-              <h6>Alimentación</h6>
-              <p>En Villa El Salvador, una madre de tres hijos recibió alimentos básicos gracias a Mano Solidaria. Con
+              <h6 class="fw-bold mb-1">Alimentación</h6>
+              <p class="small text-secondary lh-sm">En Villa El Salvador, una madre de tres hijos recibió alimentos
+                básicos gracias a Mano Solidaria. Con
                 la donación de arroz y atún pudo preparar comidas nutritivas durante semanas, devolviendo tranquilidad a
                 su familia.</p>
             </div>
           </div>
 
-          <div class="historia-item">
-            <div class="historia-icono"><i class="bi bi-circle"></i></div>
+          <div class="historia-item d-flex gap-3 mb-4 align-items-start">
+            <div class="historia-icono d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 32px; height: 32px;"><i class="bi bi-circle"></i></div>
             <div>
-              <h6>Educación</h6>
-              <p>En Cusco, un niño llamado Diego recibió una mochila con útiles escolares. Antes no podía asistir a
+              <h6 class="fw-bold mb-1">Educación</h6>
+              <p class="small text-secondary lh-sm">En Cusco, un niño llamado Diego recibió una mochila con útiles
+                escolares. Antes no podía asistir a
                 clases con materiales adecuados, pero ahora participa activamente y sueña con convertirse en profesor.
               </p>
             </div>
@@ -126,20 +140,24 @@
         </div>
         <div class="col-12 col-md-6">
 
-          <div class="historia-item mb-4">
-            <div class="historia-icono"><i class="bi bi-circle"></i></div>
+          <div class="historia-item d-flex gap-3 mb-4 align-items-start">
+            <div class="historia-icono d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 32px; height: 32px;"><i class="bi bi-circle"></i></div>
             <div>
-              <h6>Abrigo</h6>
-              <p>En Puno, donde las noches son muy frías, familias recibieron frazadas y casacas. Una abuela comentó que
+              <h6 class="fw-bold mb-1">Abrigo</h6>
+              <p class="small text-secondary lh-sm">En Puno, donde las noches son muy frías, familias recibieron
+                frazadas y casacas. Una abuela comentó que
                 por primera vez en años pudo dormir sin preocuparse por el frío extremo.</p>
             </div>
           </div>
 
-          <div class="historia-item">
-            <div class="historia-icono"><i class="bi bi-circle"></i></div>
+          <div class="historia-item d-flex gap-3 mb-4 align-items-start">
+            <div class="historia-icono d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 32px; height: 32px;"><i class="bi bi-circle"></i></div>
             <div>
-              <h6>Oportunidad</h6>
-              <p>En Ayacucho, jóvenes recibieron zapatillas nuevas para caminar largas distancias hacia sus colegios.
+              <h6 class="fw-bold mb-1">Oportunidad</h6>
+              <p class="small text-secondary lh-sm">En Ayacucho, jóvenes recibieron zapatillas nuevas para caminar
+                largas distancias hacia sus colegios.
                 Uno de ellos dijo: "Ahora puedo llegar más rápido y sin dolor, gracias a quienes piensan en nosotros."
               </p>
             </div>
@@ -152,10 +170,10 @@
 
 
 
-  <section class="seccion-cta">
-    <div class="cta-inner align-items-center">
-      <img class="cta-foto" src="img/estudiosos.jpg" alt="Niños peruanos" />
-      <div class="cta-texto">
+  <section class="seccion-cta py-5" style="background-color: var(--fondo-crema);">
+    <div class="container cta-inner d-flex align-items-center justify-content-center gap-5 flex-column flex-lg-row">
+      <img class="cta-foto rounded w-100" style="max-width: 45%;" src="img/estudiosos.jpg" alt="Niños peruanos" />
+      <div class="cta-texto p-5 rounded-4 w-100" style="max-width: 45%;">
         <h3>¿Quieres enviar una ayuda<br />para salvar vidas?</h3>
         <p>Tu ayuda puede marcar la diferencia en la vida de un niño. Con tu apoyo, podemos brindar esperanza, alimento
           y un futuro mejor a quienes mas lo necesitan.</p>
@@ -165,9 +183,10 @@
 
 
 
-  <section class="seccion-cifras">
+  <section class="seccion-cifras py-5">
     <div class="container">
-      <div class="cifras-header">
+      <div
+        class="cifras-header d-flex justify-content-between align-items-center mb-5 flex-column align-items-start flex-lg-row gap-3">
         <h2>Impacto en cifras</h2>
 
         <div class="dropdown">
@@ -185,24 +204,24 @@
 
       <div class="row g-3">
         <div class="col-12 col-md-4">
-          <div class="cifra-card">
+          <div class="cifra-card p-4 p-lg-5 rounded-4 h-100 position-relative">
             <div class="numero">145,000</div>
             <div class="label">Familias vulnerables</div>
-            <div class="flecha"><i class="bi bi-chevron-double-down"></i></div>
+            <i class="bi bi-chevron-double-down position-absolute bottom-0 end-0 p-4"></i>
           </div>
         </div>
         <div class="col-12 col-md-4">
-          <div class="cifra-card claro">
+          <div class="cifra-card p-4 p-lg-5 rounded-4 h-100 position-relative">
             <div class="numero">0</div>
             <div class="label">Cantidad de dinero recaudado</div>
-            <div class="flecha"><i class="bi bi-chevron-double-up"></i></div>
+            <i class="bi bi-chevron-double-up position-absolute bottom-0 end-0 p-4"></i>
           </div>
         </div>
         <div class="col-12 col-md-4">
-          <div class="cifra-card claro">
+          <div class="cifra-card p-4 p-lg-5 rounded-4 h-100 position-relative">
             <div class="numero">0</div>
             <div class="label">Cantidad de donadores</div>
-            <div class="flecha"><i class="bi bi-chevron-double-up"></i></div>
+            <i class="bi bi-chevron-double-up position-absolute bottom-0 end-0 p-4"></i>
           </div>
         </div>
       </div>
@@ -211,7 +230,7 @@
 
 
 
-  <section class="seccion-urgencia">
+  <section class="seccion-urgencia py-5" style="background-color: var(--fondo-crema);">
     <div class="container">
       <div class="urgencia-titulo">
         <span>Urgencia y Realidad</span>
@@ -219,11 +238,11 @@
       </div>
 
 
-      <div class="leyenda">
-        <span class="leyenda-item l-rojo">Crítica (Prioridad 1)</span>
-        <span class="leyenda-item l-naranja">Alta (Emergencia 2026)</span>
-        <span class="leyenda-item l-amarillo">Media (En Alerta)</span>
-        <span class="leyenda-item l-verde">Estable (Base)</span>
+      <div class="d-flex gap-2 mb-5 flex-wrap">
+        <span class="badge rounded-pill p-2 px-3 text-white l-rojo">Crítica (Prioridad 1)</span>
+        <span class="badge rounded-pill p-2 px-3 text-white l-naranja">Alta (Emergencia 2026)</span>
+        <span class="badge rounded-pill p-2 px-3 text-white l-amarillo">Media (En Alerta)</span>
+        <span class="badge rounded-pill p-2 px-3 text-white l-verde">Estable (Base)</span>
       </div>
 
 
@@ -231,7 +250,8 @@
 
 
         <div class="col-12 col-md-6">
-          <img src="img/PeruMap.png" alt="Mapa del Perú" class="mapa-img" />
+          <img src="img/PeruMap.png" alt="Mapa del Perú" class="w-100 rounded"
+            style="max-height: 500px; object-fit: contain;" />
 
         </div>
 
@@ -244,7 +264,7 @@
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#acc1">
-                  <span class="acc-badge l-rojo">Prioridad 1</span>
+                  <span class="acc-badge badge rounded-pill p-2 px-3 l-rojo me-3">Prioridad 1</span>
                   Intervención Crítica
                 </button>
               </h2>
@@ -261,7 +281,7 @@
               <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                   data-bs-target="#acc2">
-                  <span class="acc-badge l-naranja">Prioridad 2</span>
+                  <span class="acc-badge badge rounded-pill p-2 px-3 l-naranja me-3">Prioridad 2</span>
                   Emergencia Activa
                 </button>
               </h2>
@@ -278,7 +298,7 @@
               <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                   data-bs-target="#acc3">
-                  <span class="acc-badge l-amarillo">Prioridad 3</span>
+                  <span class="acc-badge badge rounded-pill p-2 px-3 l-amarillo me-3">Prioridad 3</span>
                   Vulnerabilidad Alta
                 </button>
               </h2>
@@ -295,7 +315,7 @@
               <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                   data-bs-target="#acc4">
-                  <span class="acc-badge l-verde">Prioridad 4</span>
+                  <span class="acc-badge badge rounded-pill p-2 px-3 l-verde me-3">Prioridad 4</span>
                   Atención Preventiva
                 </button>
               </h2>
@@ -316,8 +336,8 @@
 
 
 
-  <footer>
-    <div class="container">
+  <footer class="text-secondary p-5" style="background-color: #1a1a1a;">
+    <div class="container-fluid">
       <div class="row g-4">
 
         <div class="col-12 col-md-3">
@@ -354,7 +374,7 @@
 
       </div>
 
-      <div class="copy">
+      <div class="copy border-top border-secondary mt-5 pt-4 text-center small">
         © 2026 Qusqu kamayuq – Todos los derechos reservados
       </div>
     </div>

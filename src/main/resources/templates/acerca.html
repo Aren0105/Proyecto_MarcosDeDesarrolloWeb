@@ -11,23 +11,25 @@
   <link href="/style.css" rel="stylesheet" />
 </head>
 
-<body>
-  <nav class="navbar navbar-expand-lg sticky-top">
+<body class="overflow-x-hidden">
+  <nav class="navbar navbar-expand-lg sticky-top py-2 px-lg-5">
     <div class="container-fluid px-lg-4">
-      <a class="navbar-brand" th:href="@{/}">Qusqu kamayuq</a>
+      <a class="navbar-brand" th:href="@{/home}">Qusqu kamayuq</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav ms-auto align-items-center gap-1">
+        <ul class="navbar-nav ms-auto align-items-center gap-2">
           <li class="nav-item">
-            <a class="nav-link active" href="/acerca">Acerca de</a>
+            <a class="nav-link active fw-semibold py-1 px-3 rounded-pill text-dark" href="/acerca">Acerca de</a>
           </li>
+          <li class="nav-item"><a class="nav-link fw-semibold py-1 px-3 rounded-pill text-dark"
+              href="/campanias">Campañas</a></li>
           <li class="nav-item">
-            <a class="nav-link" href="/donar">Donar</a>
+            <a class="nav-link fw-semibold py-1 px-3 rounded-pill text-dark" href="/donar">Donar</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link btn-ingresar ms-2" href="/login">Ingresar</a>
+          <li class="nav-item" id="nav-usuario">
+            <a class="nav-link btn-ingresar ms-2 rounded fw-bold py-1 px-3" href="/login">Ingresar</a>
           </li>
         </ul>
       </div>
@@ -163,7 +165,7 @@
           <div class="accordion-item shadow-sm rounded-4 overflow-hidden mb-3">
             <h2 class="accordion-header">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
-                <span class="acc-badge bg-critica me-3">Prioridad 1</span>
+                <span class="acc-badge badge rounded-pill p-2 bg-critica me-3">Prioridad 1</span>
                 ¿Qué es "Qusqu kamayuq"?
               </button>
             </h2>
@@ -178,7 +180,7 @@
           <div class="accordion-item shadow-sm rounded-4 overflow-hidden mb-3">
             <h2 class="accordion-header">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
-                <span class="acc-badge bg-emergencia me-3">Prioridad 2</span>
+                <span class="acc-badge badge rounded-pill p-2 bg-emergencia me-3">Prioridad 2</span>
                 ¿Hay costos por usarla?
               </button>
             </h2>
@@ -193,7 +195,7 @@
           <div class="accordion-item shadow-sm rounded-4 overflow-hidden mb-3">
             <h2 class="accordion-header">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">
-                <span class="acc-badge bg-vulnerabilidad me-3">Prioridad 3</span>
+                <span class="acc-badge badge rounded-pill p-2 bg-vulnerabilidad me-3">Prioridad 3</span>
                 ¿Es seguro donar?
               </button>
             </h2>
@@ -208,7 +210,7 @@
           <div class="accordion-item shadow-sm rounded-4 overflow-hidden mb-3">
             <h2 class="accordion-header">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f4">
-                <span class="acc-badge bg-preventiva me-3">Prioridad 4</span>
+                <span class="acc-badge badge rounded-pill p-2 bg-preventiva me-3">Prioridad 4</span>
                 ¿Qué métodos de pago aceptan?
               </button>
             </h2>
@@ -224,9 +226,10 @@
     </section>
   </main>
 
-  <footer>
-    <div class="container">
+  <footer class="text-secondary p-5" style="background-color: #1a1a1a;">
+    <div class="container-fluid">
       <div class="row g-4">
+
         <div class="col-12 col-md-3">
           <div class="footer-brand">Qusqu kamayuq</div>
           <div class="social-links mt-3">
@@ -236,25 +239,32 @@
             <a href="#"><i class="bi bi-instagram"></i></a>
           </div>
         </div>
+
         <div class="col-6 col-md-2">
           <h6>Plataforma</h6>
-          <a href="index.html">Inicio</a>
-          <a href="donar.html">Donar</a>
+          <a href="#">Inicio</a>
+          <a href="#">Donar</a>
+          <a href="#">Productos</a>
         </div>
+
         <div class="col-6 col-md-4">
-          <h6>Contacto</h6>
+          <h6>Información de contacto</h6>
           <a href="tel:+5112345678"><i class="bi bi-telephone me-1"></i>+51 1 234 5678</a>
-          <a href="mailto:contacto@qusqu.org"><i class="bi bi-envelope me-1"></i>contacto@qusqu.org</a>
-          <span class="d-block small mt-2"><i class="bi bi-geo-alt me-1"></i>Av. Solidaridad 123, Lima –
-            Perú</span>
+          <a href="mailto:contacto@manosolidaria.org"><i class="bi bi-envelope me-1"></i>contacto@manosolidaria.org</a>
+          <span style="font-size:.84rem; color:#888;"><i class="bi bi-geo-alt me-1"></i>Av. Solidaridad 123, Miraflores,
+            Lima – Perú</span>
         </div>
+
         <div class="col-6 col-md-3">
           <h6>Ayuda</h6>
           <a href="#">Preguntas frecuentes</a>
           <a href="#">Términos y condiciones</a>
+          <a href="#">Política de privacidad</a>
         </div>
+
       </div>
-      <div class="copy">
+
+      <div class="copy border-top border-secondary mt-5 pt-4 text-center small">
         © 2026 Qusqu kamayuq – Todos los derechos reservados
       </div>
     </div>

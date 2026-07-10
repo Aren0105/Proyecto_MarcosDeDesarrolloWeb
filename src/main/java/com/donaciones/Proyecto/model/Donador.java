@@ -25,38 +25,82 @@ public class Donador {
 
     private LocalDateTime tokenExpiryDate;
 
+    @Column(nullable = false, length = 20)
+    private String rol = "USER"; // Valor por defecto "USER"
+
     // --- CONSTRUCTORES NATIVOS ---
 
     // Constructor vacío requerido por JPA/Hibernate
-    public Donador() {}
+    public Donador() {
+    }
 
     // Constructor completo (equivalente al @AllArgsConstructor de Lombok)
-    public Donador(Long id, String nombre, String email, String contrasenia, String resetToken, LocalDateTime tokenExpiryDate) {
+    public Donador(Long id, String nombre, String email, String contrasenia, String resetToken,
+            LocalDateTime tokenExpiryDate, String rol) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
         this.contrasenia = contrasenia;
         this.resetToken = resetToken;
         this.tokenExpiryDate = tokenExpiryDate;
+        this.rol = rol;
     }
 
     // --- GETTERS Y SETTERS NATIVOS (Equivalentes al @Data de Lombok) ---
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public String getContrasenia() { return contrasenia; }
-    public void setContrasenia(String contrasenia) { this.contrasenia = contrasenia; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public String getResetToken() { return resetToken; }
-    public void setResetToken(String resetToken) { this.resetToken = resetToken; }
+    public String getEmail() {
+        return email;
+    }
 
-    public LocalDateTime getTokenExpiryDate() { return tokenExpiryDate; }
-    public void setTokenExpiryDate(LocalDateTime tokenExpiryDate) { this.tokenExpiryDate = tokenExpiryDate; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getContrasenia() {
+        return contrasenia;
+    }
+
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
+
+    public LocalDateTime getTokenExpiryDate() {
+        return tokenExpiryDate;
+    }
+
+    public void setTokenExpiryDate(LocalDateTime tokenExpiryDate) {
+        this.tokenExpiryDate = tokenExpiryDate;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
 }

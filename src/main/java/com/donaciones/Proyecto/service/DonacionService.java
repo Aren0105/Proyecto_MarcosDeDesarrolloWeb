@@ -1,6 +1,5 @@
 package com.donaciones.Proyecto.service;
 
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.donaciones.Proyecto.model.Campania;
 import com.donaciones.Proyecto.model.Donacion;
 import com.donaciones.Proyecto.repository.CampaniaRepository;
 import com.donaciones.Proyecto.repository.DonacionRepository;
@@ -28,20 +28,23 @@ public class DonacionService {
         donacion.setMonto(Double.valueOf(datos.get("monto").toString()));
         donacion.setTipo(datos.get("tipo").toString());
         donacion.setDonadorId(Long.valueOf(datos.get("donadorId").toString()));
-        donacion.setCampaniaId(datos.get("campaniaId") != null ?
-                Long.valueOf(datos.get("campaniaId").toString()) : null);
         donacion.setFechaDonacion(LocalDateTime.now());
         donacion.setEstado("PENDIENTE");
+
+        if (datos.get("campaniaId") != null) {
+            Long campaniaId = Long.valueOf(datos.get("campaniaId").toString());
+            Campania campania = campaniaRepository.findById(campaniaId).orElse(null);
+            donacion.setCampania(campania);
+        }
 
         Donacion guardada = donacionRepository.save(donacion);
 
         // Actualizar recaudadoActual de la campaña
-        if (donacion.getCampaniaId() != null) {
-            campaniaRepository.findById(donacion.getCampaniaId()).ifPresent(campania -> {
-                double nuevoRecaudado = campania.getRecaudadoActual() + donacion.getMonto();
-                campania.setRecaudadoActual(nuevoRecaudado);
-                campaniaRepository.save(campania);
-            });
+        if (donacion.getCampania() != null) {
+            Campania campania = donacion.getCampania();
+            double nuevoRecaudado = campania.getRecaudadoActual() + donacion.getMonto();
+            campania.setRecaudadoActual(nuevoRecaudado);
+            campaniaRepository.save(campania);
         }
 
         return ResponseEntity.ok(guardada);

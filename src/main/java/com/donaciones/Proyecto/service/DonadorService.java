@@ -57,11 +57,13 @@ public class DonadorService {
 
         emailService.enviarCorreoReset(donador.getEmail(), token);
 
-        return ResponseEntity.ok(Map.of("mensaje", "Se ha enviado un correo con las instrucciones para restablecer tu contraseña"));
+        return ResponseEntity
+                .ok(Map.of("mensaje", "Se ha enviado un correo con las instrucciones para restablecer tu contraseña"));
     }
 
     public ResponseEntity<?> validarTokenReset(String token) {
-        Optional<Donador> donadorOpt = donadorRepository.findByResetTokenAndTokenExpiryDateAfter(token, LocalDateTime.now());
+        Optional<Donador> donadorOpt = donadorRepository.findByResetTokenAndTokenExpiryDateAfter(token,
+                LocalDateTime.now());
 
         if (donadorOpt.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Token inválido o expirado"));
@@ -71,7 +73,8 @@ public class DonadorService {
     }
 
     public ResponseEntity<?> restablecerContrasenia(String token, String nuevaContrasenia) {
-        Optional<Donador> donadorOpt = donadorRepository.findByResetTokenAndTokenExpiryDateAfter(token, LocalDateTime.now());
+        Optional<Donador> donadorOpt = donadorRepository.findByResetTokenAndTokenExpiryDateAfter(token,
+                LocalDateTime.now());
 
         if (donadorOpt.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Token inválido o expirado"));
@@ -84,6 +87,28 @@ public class DonadorService {
 
         donadorRepository.save(donador);
 
-        return ResponseEntity.ok(Map.of("mensaje", "Contraseña restablecida correctamente. Ahora puedes iniciar sesión."));
+        return ResponseEntity
+                .ok(Map.of("mensaje", "Contraseña restablecida correctamente. Ahora puedes iniciar sesión."));
+    }
+
+    public ResponseEntity<?> cambiarContrasenia(Long donadorId, String passActual, String passNueva) {
+        Optional<Donador> donadorOpt = donadorRepository.findById(donadorId);
+
+        if (donadorOpt.isEmpty()) {
+            return ResponseEntity.status(404).body(Map.of("error", "Usuario no encontrado."));
+        }
+
+        Donador donador = donadorOpt.get();
+
+        // Aquí se debería usar un codificador de contraseñas (BCrypt) en un proyecto
+        // real
+        if (!donador.getContrasenia().equals(passActual)) {
+            return ResponseEntity.badRequest().body(Map.of("error", "La contraseña actual es incorrecta."));
+        }
+
+        donador.setContrasenia(passNueva);
+        donadorRepository.save(donador);
+
+        return ResponseEntity.ok(Map.of("mensaje", "Tu contraseña ha sido actualizada con éxito."));
     }
 }
