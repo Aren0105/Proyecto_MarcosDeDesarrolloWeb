@@ -11,19 +11,30 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void enviarCorreoReset(String destinatario, String token) {
+    public void enviarCorreoReset(String destinatario, String codigo) {
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(destinatario);
-        message.setSubject("Mano Solidaria - Restablecer contraseña");
+        message.setSubject("Mano Solidaria - Código de recuperación");
 
-        // CORREGIDO: Ahora apunta al entorno de Spring Boot y maneja la ruta del controlador web
-        String link = "http://localhost:8080/reset-password?token=" + token;
-        
-        System.out.println("LINK GENERADO: " + link);
-        message.setText("Haz clic en el siguiente enlace para restablecer tu contraseña:\n\n" + link +
-                "\n\nEste enlace expirará en 1 hora.\n\nSi no solicitaste este cambio, ignora este mensaje.");
+        String texto = """
+                Hola,
 
-        System.out.println("Intentando enviar a: " + destinatario);
+                Hemos recibido una solicitud para restablecer tu contraseña.
+
+                Tu código de verificación es:
+
+                %s
+
+                Este código es válido durante 10 minutos.
+
+                Si no solicitaste este cambio, puedes ignorar este correo.
+
+                Equipo de Mano Solidaria.
+                """.formatted(codigo);
+
+        message.setText(texto);
+
         mailSender.send(message);
     }
 }

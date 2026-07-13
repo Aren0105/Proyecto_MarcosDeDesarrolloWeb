@@ -41,7 +41,7 @@ public class ViewController {
         return "recuperar"; // Muestra templates/recuperar.html
     }
 
-    @GetMapping("/reset-password")
+    @GetMapping("/reset-contrasenia")
     public String resetContrasenia() {
         return "reset-contrasenia"; // Muestra templates/reset-contrasenia.html
     }

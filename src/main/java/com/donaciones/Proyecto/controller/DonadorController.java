@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.donaciones.Proyecto.DTO.ResetContrasenia;
@@ -52,14 +51,12 @@ public class DonadorController {
         return donadorService.generarTokenReset(request.getEmail());
     }
 
-    @GetMapping("/validate-reset-token")
-    public ResponseEntity<?> validateResetToken(@RequestParam String token) {
-        return donadorService.validarTokenReset(token);
-    }
-
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetContrasenia request) {
-        return donadorService.restablecerContrasenia(request.getToken(), request.getNuevaContrasenia());
+        return donadorService.restablecerContrasenia(
+                request.getEmail(),
+                request.getCodigo(),
+                request.getNuevaContrasenia());
     }
 
     @PostMapping("/cambiar-password")

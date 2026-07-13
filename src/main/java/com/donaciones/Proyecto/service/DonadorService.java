@@ -1,15 +1,17 @@
 package com.donaciones.Proyecto.service;
 
-import com.donaciones.Proyecto.model.Donador;
-import com.donaciones.Proyecto.repository.DonadorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.Random;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.donaciones.Proyecto.model.Donador;
+import com.donaciones.Proyecto.repository.DonadorRepository;
 
 @Service
 public class DonadorService {
@@ -41,54 +43,56 @@ public class DonadorService {
     }
 
     public ResponseEntity<?> generarTokenReset(String email) {
+
         Optional<Donador> donadorOpt = donadorRepository.findByEmail(email);
 
         if (donadorOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "No existe una cuenta con ese email"));
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "No existe una cuenta con ese correo."));
         }
 
         Donador donador = donadorOpt.get();
 
-        String token = UUID.randomUUID().toString();
-        donador.setResetToken(token);
-        donador.setTokenExpiryDate(LocalDateTime.now().plusMinutes(60));
+        Random random = new Random();
+        String codigo = String.format("%06d", random.nextInt(1000000));
+
+        donador.setCodigoRecuperacion(codigo);
+        donador.setCodigoExpiracion(LocalDateTime.now().plusMinutes(10));
 
         donadorRepository.save(donador);
 
-        emailService.enviarCorreoReset(donador.getEmail(), token);
+        emailService.enviarCorreoReset(donador.getEmail(), codigo);
 
-        return ResponseEntity
-                .ok(Map.of("mensaje", "Se ha enviado un correo con las instrucciones para restablecer tu contraseña"));
+        return ResponseEntity.ok(
+                Map.of("mensaje", "Se envió un código de verificación a tu correo."));
     }
 
-    public ResponseEntity<?> validarTokenReset(String token) {
-        Optional<Donador> donadorOpt = donadorRepository.findByResetTokenAndTokenExpiryDateAfter(token,
-                LocalDateTime.now());
+    public ResponseEntity<?> restablecerContrasenia(String email,
+            String codigo,
+            String nuevaContrasenia) {
+
+        Optional<Donador> donadorOpt
+                = donadorRepository.findByEmailAndCodigoRecuperacionAndCodigoExpiracionAfter(
+                        email,
+                        codigo,
+                        LocalDateTime.now());
 
         if (donadorOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Token inválido o expirado"));
-        }
-
-        return ResponseEntity.ok(Map.of("valido", true));
-    }
-
-    public ResponseEntity<?> restablecerContrasenia(String token, String nuevaContrasenia) {
-        Optional<Donador> donadorOpt = donadorRepository.findByResetTokenAndTokenExpiryDateAfter(token,
-                LocalDateTime.now());
-
-        if (donadorOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Token inválido o expirado"));
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Código incorrecto o expirado."));
         }
 
         Donador donador = donadorOpt.get();
+
         donador.setContrasenia(nuevaContrasenia);
-        donador.setResetToken(null);
-        donador.setTokenExpiryDate(null);
+
+        donador.setCodigoRecuperacion(null);
+        donador.setCodigoExpiracion(null);
 
         donadorRepository.save(donador);
 
-        return ResponseEntity
-                .ok(Map.of("mensaje", "Contraseña restablecida correctamente. Ahora puedes iniciar sesión."));
+        return ResponseEntity.ok(
+                Map.of("mensaje", "Contraseña actualizada correctamente."));
     }
 
     public ResponseEntity<?> cambiarContrasenia(Long donadorId, String passActual, String passNueva) {
