@@ -240,25 +240,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnLogin.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Ingresando...';
                 btnLogin.disabled = true;
 
-                // CORREGIDO: Ruta relativa para consultar la API de donadores
-                const response = await fetch('/api/donadores');
+                // CORREGIDO: Se envía la información al backend para que él valide
+                const response = await fetch('/api/donadores/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, contrasenia: pass })
+                });
 
                 if (response.ok) {
-                    const donadores = await response.json();
-                    const donador = donadores.find(d => d.email === email && d.contrasenia === pass);
-
-                    if (donador) {
-                        sessionStorage.setItem('donadorId', donador.id);
-                        sessionStorage.setItem('usuarioLogueado', donador.nombre);
-                        sessionStorage.setItem('usuarioRol', donador.rol); // Guardamos el rol del usuario
-                        mostrarAlerta(`¡Bienvenido ${donador.nombre}!`, "success", "mensajeLogin");
-                        setTimeout(() => {
-                            window.location.href = '/home'; // CORREGIDO: Redirige a la nueva ruta del home
-                        }, 1500);
-                    } else {
-                        mostrarAlerta("Correo o contraseña incorrectos", "danger", "mensajeLogin");
-                    }
+                    const donador = await response.json();
+                    sessionStorage.setItem('donadorId', donador.id);
+                    sessionStorage.setItem('usuarioLogueado', donador.nombre);
+                    sessionStorage.setItem('usuarioRol', donador.rol); // Guardamos el rol del usuario
+                    mostrarAlerta(`¡Bienvenido ${donador.nombre}!`, "success", "mensajeLogin");
+                    setTimeout(() => {
+                        window.location.href = '/home'; // CORREGIDO: Redirige a la nueva ruta del home
+                    }, 1500);
+                } else if (response.status === 401) {
+                    // 401 Unauthorized - Credenciales incorrectas
+                    mostrarAlerta("Correo o contraseña incorrectos", "danger", "mensajeLogin");
                 } else {
+                    // Otros errores del servidor
                     mostrarAlerta("Error de conexión con el servidor", "danger", "mensajeLogin");
                 }
             } catch (error) {
@@ -714,7 +716,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/campanias/activas');
             if (response.ok) {
                 const campanias = await response.json();
-                campanias.forEach(c => {
+                // Filtra para mostrar solo campañas que no han vencido
+                const campaniasActivas = campanias.filter(c => {
+                    return c.fechaFin ? new Date(c.fechaFin) >= new Date() : true;
+                });
+
+                campaniasActivas.forEach(c => {
                     const option = document.createElement('option');
                     option.value = c.id;
                     option.textContent = c.nombre;

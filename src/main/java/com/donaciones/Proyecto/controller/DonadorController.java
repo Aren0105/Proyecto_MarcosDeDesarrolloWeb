@@ -46,6 +46,13 @@ public class DonadorController {
         return donadorService.buscar(id);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<Donador> login(@RequestBody Map<String, String> credenciales) {
+        String email = credenciales.get("email");
+        String contrasenia = credenciales.get("contrasenia");
+        return donadorService.login(email, contrasenia);
+    }
+
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody SoliContrasenia request) {
         return donadorService.generarTokenReset(request.getEmail());
