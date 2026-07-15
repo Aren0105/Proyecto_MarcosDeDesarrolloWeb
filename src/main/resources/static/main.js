@@ -455,7 +455,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     return `
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span>Donación de <strong>S/. ${d.monto.toFixed(2)}</strong> ${destino}</span>
-                            <span class="badge bg-success rounded-pill">${new Date(d.fechaDonacion).toLocaleDateString()}</span>
+                            <span class="badge bg-success rounded-pill">${new Date(d.fechaDonacion).toLocaleDateString('es-PE', {
+                        year: 'numeric', month: '2-digit', day: '2-digit'
+                    })
+                        }</span>
                         </li>`;
                 }).join('') || '<li class="list-group-item">Aún no has realizado donaciones.</li>';
             }
@@ -595,18 +598,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
 
-            // Ajuste: Convertir la fecha a un formato ISO con hora para que coincida con LocalDateTime en Java
-            if (data.fechaFin) {
-                data.fechaFin = new Date(data.fechaFin).toISOString();
+            const nombre = document.getElementById('nombre').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const metaRecaudacion = document.getElementById('metaRecaudacion').value;
+            let fechaFin = document.getElementById('fechaFin').value;
+
+            if (fechaFin) {
+                // Aseguramos que la fecha se envíe en formato ISO compatible con el backend
+                fechaFin = new Date(fechaFin).toISOString();
             }
 
             const response = await fetch('/api/campanias/crear', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify({
+                    nombre: nombre,
+                    descripcion: descripcion,
+                    metaRecaudacion: metaRecaudacion,
+                    fechaFin: fechaFin
+                })
             });
 
             if (response.ok) {

@@ -1,6 +1,6 @@
 package com.donaciones.Proyecto.model;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +34,7 @@ public class Donacion {
     private Campania campania;
 
     @Column(name = "fecha_donacion")
-    private LocalDateTime fechaDonacion;
+    private OffsetDateTime fechaDonacion;
 
     @Column(length = 20)
     private String estado;
@@ -45,7 +45,7 @@ public class Donacion {
     }
 
     // Constructor completo (equivalente al @AllArgsConstructor de Lombok)
-    public Donacion(Long id, Double monto, String tipo, Long donadorId, Campania campania, LocalDateTime fechaDonacion,
+    public Donacion(Long id, Double monto, String tipo, Long donadorId, Campania campania, OffsetDateTime fechaDonacion,
             String estado) {
         this.id = id;
         this.monto = monto;
@@ -97,11 +97,11 @@ public class Donacion {
         this.campania = campania;
     }
 
-    public LocalDateTime getFechaDonacion() {
+    public OffsetDateTime getFechaDonacion() {
         return fechaDonacion;
     }
 
-    public void setFechaDonacion(LocalDateTime fechaDonacion) {
+    public void setFechaDonacion(OffsetDateTime fechaDonacion) {
         this.fechaDonacion = fechaDonacion;
     }
 

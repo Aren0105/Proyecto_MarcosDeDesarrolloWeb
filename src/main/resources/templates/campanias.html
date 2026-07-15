@@ -34,20 +34,22 @@
         </div>
     </nav>
 
-    <main class="container py-5">
-        <div class="d-flex justify-content-between align-items-center mb-5">
-            <h1 class="display-5 fw-bold">Campañas Activas</h1>
-            <a href="/crear-campania" class="btn btn-dark fw-bold admin-only" style="display: none;">
-                <i class="bi bi-plus-circle me-1"></i> Crear Nueva Campaña
-            </a>
-        </div>
-        <div id="lista-campanias" class="row g-4">
-            <!-- Las campañas se cargarán aquí por JS -->
-            <div class="text-center">
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Cargando...</span>
+    <main class="seccion-campanias">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <h1 class="display-5 fw-bold">Campañas Activas</h1>
+                <a href="/crear-campania" class="btn btn-dark fw-bold admin-only" style="display: none;">
+                    <i class="bi bi-plus-circle me-1"></i> Crear Nueva Campaña
+                </a>
+            </div>
+            <div id="lista-campanias" class="row g-4">
+                <!-- Las campañas se cargarán aquí por JS -->
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <p>Cargando campañas...</p>
                 </div>
-                <p>Cargando campañas...</p>
             </div>
         </div>
     </main>
