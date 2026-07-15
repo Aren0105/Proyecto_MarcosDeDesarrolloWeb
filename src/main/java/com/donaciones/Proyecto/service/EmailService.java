@@ -21,6 +21,7 @@ public class EmailService {
 
     public void enviarCorreoReset(String destinatario, String codigo) {
         // Log para visualizar localmente en consola de inmediato
+        logger.info("==================================================");
         logger.info("CÓDIGO DE RECUPERACIÓN GENERADO: {}", codigo);
         logger.info("Enviando correo a: {}", destinatario);
         logger.info("==================================================");
