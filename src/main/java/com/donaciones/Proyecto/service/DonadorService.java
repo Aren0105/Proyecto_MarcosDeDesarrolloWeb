@@ -8,6 +8,7 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.donaciones.Proyecto.model.Donador;
@@ -72,12 +73,17 @@ public class DonadorService {
         donador.setCodigoRecuperacion(codigo);
         donador.setCodigoExpiracion(LocalDateTime.now().plusMinutes(10));
 
-        donadorRepository.save(donador);
-
-        emailService.enviarCorreoReset(donador.getEmail(), codigo);
-
-        return ResponseEntity.ok(
-                Map.of("mensaje", "Se envió un código de verificación a tu correo."));
+        try {
+            emailService.enviarCorreoReset(donador.getEmail(), codigo);
+            // Solo guardamos si el correo se envió con éxito
+            donadorRepository.save(donador);
+            return ResponseEntity.ok(
+                    Map.of("mensaje", "Se envió un código de verificación a tu correo."));
+        } catch (Exception e) {
+            // Si el correo falla, no se guarda el código y se notifica el error.
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "No se pudo enviar el correo de recuperación. Inténtalo más tarde."));
+        }
     }
 
     public ResponseEntity<?> restablecerContrasenia(String email,

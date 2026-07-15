@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,9 +47,9 @@ public class EmailService {
 
         try {
             mailSender.send(message);
-            logger.info("Correo enviado exitosamente a {} usando Gmail SMTP.", destinatario);
-        } catch (Exception e) {
-            logger.error("Error al enviar correo mediante Gmail SMTP a {}: {}", destinatario, e.getMessage());
+        } catch (MailException e) {
+            logger.error("Error al enviar el correo de recuperación a {}", destinatario, e);
+            throw new RuntimeException("Error al enviar el correo de recuperación.", e);
         }
     }
 }
