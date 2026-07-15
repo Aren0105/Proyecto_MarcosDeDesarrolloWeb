@@ -1,6 +1,7 @@
 package com.donaciones.Proyecto.service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class DonacionService {
         donacion.setMonto(Double.valueOf(datos.get("monto").toString()));
         donacion.setTipo(datos.get("tipo").toString());
         donacion.setDonadorId(Long.valueOf(datos.get("donadorId").toString()));
-        donacion.setFechaDonacion(LocalDateTime.now());
+        donacion.setFechaDonacion(OffsetDateTime.now(ZoneId.of("UTC")));
         donacion.setEstado("PENDIENTE");
 
         if (datos.get("campaniaId") != null) {

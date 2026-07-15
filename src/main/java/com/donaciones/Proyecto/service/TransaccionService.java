@@ -1,6 +1,7 @@
 package com.donaciones.Proyecto.service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,14 +29,13 @@ public class TransaccionService {
         transaccion.put("id", siguienteId++);
         transaccion.put("donacionId", donacionId);
         transaccion.put("metodoPago", metodoPago);
-        transaccion.put("fechaPago", LocalDateTime.now());
+        transaccion.put("fechaPago", LocalDateTime.now(ZoneId.of("UTC")));
         transaccion.put("estadoPago", "COMPLETADO");
 
         transacciones.put(donacionId, transaccion);
 
         return ResponseEntity.ok(Map.of(
                 "mensaje", "Pago registrado exitosamente. ¡Gracias por tu donación!",
-                "transaccion", transaccion
-        ));
+                "transaccion", transaccion));
     }
 }

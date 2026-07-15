@@ -36,6 +36,19 @@ public class DonadorService {
         return donadorRepository.findAll();
     }
 
+    public ResponseEntity<Donador> login(String email, String contrasenia) {
+        Optional<Donador> donadorOpt = donadorRepository.findByEmail(email);
+        if (donadorOpt.isPresent()) {
+            Donador donador = donadorOpt.get();
+            // En un proyecto real, las contraseñas deben estar encriptadas.
+            // Aquí comparamos en texto plano como en el código original.
+            if (donador.getContrasenia().equals(contrasenia)) {
+                return ResponseEntity.ok(donador);
+            }
+        }
+        return ResponseEntity.status(401).build(); // 401 Unauthorized
+    }
+
     public ResponseEntity<Donador> buscar(Long id) {
         return donadorRepository.findById(id)
                 .map(ResponseEntity::ok)
@@ -71,11 +84,10 @@ public class DonadorService {
             String codigo,
             String nuevaContrasenia) {
 
-        Optional<Donador> donadorOpt
-                = donadorRepository.findByEmailAndCodigoRecuperacionAndCodigoExpiracionAfter(
-                        email,
-                        codigo,
-                        LocalDateTime.now());
+        Optional<Donador> donadorOpt = donadorRepository.findByEmailAndCodigoRecuperacionAndCodigoExpiracionAfter(
+                email,
+                codigo,
+                LocalDateTime.now());
 
         if (donadorOpt.isEmpty()) {
             return ResponseEntity.badRequest()

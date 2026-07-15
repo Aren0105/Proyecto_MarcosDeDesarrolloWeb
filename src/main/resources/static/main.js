@@ -240,25 +240,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnLogin.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Ingresando...';
                 btnLogin.disabled = true;
 
-                // CORREGIDO: Ruta relativa para consultar la API de donadores
-                const response = await fetch('/api/donadores');
+                // CORREGIDO: Se envía la información al backend para que él valide
+                const response = await fetch('/api/donadores/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, contrasenia: pass })
+                });
 
                 if (response.ok) {
-                    const donadores = await response.json();
-                    const donador = donadores.find(d => d.email === email && d.contrasenia === pass);
-
-                    if (donador) {
-                        sessionStorage.setItem('donadorId', donador.id);
-                        sessionStorage.setItem('usuarioLogueado', donador.nombre);
-                        sessionStorage.setItem('usuarioRol', donador.rol); // Guardamos el rol del usuario
-                        mostrarAlerta(`¡Bienvenido ${donador.nombre}!`, "success", "mensajeLogin");
-                        setTimeout(() => {
-                            window.location.href = '/home'; // CORREGIDO: Redirige a la nueva ruta del home
-                        }, 1500);
-                    } else {
-                        mostrarAlerta("Correo o contraseña incorrectos", "danger", "mensajeLogin");
-                    }
+                    const donador = await response.json();
+                    sessionStorage.setItem('donadorId', donador.id);
+                    sessionStorage.setItem('usuarioLogueado', donador.nombre);
+                    sessionStorage.setItem('usuarioRol', donador.rol); // Guardamos el rol del usuario
+                    mostrarAlerta(`¡Bienvenido ${donador.nombre}!`, "success", "mensajeLogin");
+                    setTimeout(() => {
+                        window.location.href = '/home'; // CORREGIDO: Redirige a la nueva ruta del home
+                    }, 1500);
+                } else if (response.status === 401) {
+                    // 401 Unauthorized - Credenciales incorrectas
+                    mostrarAlerta("Correo o contraseña incorrectos", "danger", "mensajeLogin");
                 } else {
+                    // Otros errores del servidor
                     mostrarAlerta("Error de conexión con el servidor", "danger", "mensajeLogin");
                 }
             } catch (error) {
@@ -453,7 +455,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     return `
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span>Donación de <strong>S/. ${d.monto.toFixed(2)}</strong> ${destino}</span>
-                            <span class="badge bg-success rounded-pill">${new Date(d.fechaDonacion).toLocaleDateString()}</span>
+                            <span class="badge bg-success rounded-pill">${new Date(d.fechaDonacion).toLocaleDateString('es-PE', {
+                        year: 'numeric', month: '2-digit', day: '2-digit'
+                    })
+                        }</span>
                         </li>`;
                 }).join('') || '<li class="list-group-item">Aún no has realizado donaciones.</li>';
             }
@@ -593,18 +598,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
 
-            // Ajuste: Convertir la fecha a un formato ISO con hora para que coincida con LocalDateTime en Java
-            if (data.fechaFin) {
-                data.fechaFin = new Date(data.fechaFin).toISOString();
+            const nombre = document.getElementById('nombre').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const metaRecaudacion = document.getElementById('metaRecaudacion').value;
+            let fechaFin = document.getElementById('fechaFin').value;
+
+            if (fechaFin) {
+                // Aseguramos que la fecha se envíe en formato ISO compatible con el backend
+                fechaFin = new Date(fechaFin).toISOString();
             }
 
             const response = await fetch('/api/campanias/crear', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify({
+                    nombre: nombre,
+                    descripcion: descripcion,
+                    metaRecaudacion: metaRecaudacion,
+                    fechaFin: fechaFin
+                })
             });
 
             if (response.ok) {
@@ -714,7 +727,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/campanias/activas');
             if (response.ok) {
                 const campanias = await response.json();
-                campanias.forEach(c => {
+                // Filtra para mostrar solo campañas que no han vencido
+                const campaniasActivas = campanias.filter(c => {
+                    return c.fechaFin ? new Date(c.fechaFin) >= new Date() : true;
+                });
+
+                campaniasActivas.forEach(c => {
                     const option = document.createElement('option');
                     option.value = c.id;
                     option.textContent = c.nombre;
